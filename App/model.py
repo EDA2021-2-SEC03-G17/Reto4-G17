@@ -25,18 +25,23 @@
  """
 
 
+from DISClib.DataStructures.arraylist import defaultfunction
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.DataStructures import graphstructure as gs
 assert cf
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
 """
-
+def newCatalog():
+    catalogo = {}
+    catalogo['Vuelos'] = gs.newGraph(datastructure='ADJ_LIST',directed=True,size =9076 ,comparefunction=defaultfunction)
+    catalogo['Aeropuertos'] = gs.newGraph(datastructure='ADJ_LIST',directed=False,size = 14000,comparefunction=defaultfunction)
 # Construccion de modelos
 
 # Funciones para agregar informacion al catalogo
