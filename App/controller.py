@@ -96,6 +96,7 @@ def loadServices(analyzer):
         model.addStopConnection(analyzer, route)
         lastroute = route
     model.addRouteConnections(analyzer)
+    model.addRouteConnectionsDepartures(analyzer)
     return analyzer
 
 # Funciones de ordenamiento

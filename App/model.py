@@ -41,7 +41,7 @@ def newItinerary():
 
     """ Inicializa el analizador
     Airport Routes: Tabla de Hash con los vertices del grafo
-   Flights Network: Grafo para representar las rutas entre estaciones
+    Flights Network: Grafo para representar las rutas entre estaciones
     """
     try:
         itinerary = {
@@ -49,8 +49,10 @@ def newItinerary():
                     "Flights Network": None,
                     'Routes':None
                     }
-        itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
-        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=100000 ,comparefunction=compareStopIds)
+
+        itinerary['Airports Departures'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
+        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
+
         return itinerary
 
     except Exception as exp:
@@ -68,8 +70,8 @@ def addStopConnection(itinerary, flight):
     Si la estacion sirve otra ruta, se tiene: AER - DP
     """
     try:
-        origin = formatVertex(flight)
-        destination = flight ['Destination']
+        origin = formatVertexDeparture(flight)
+        destination = flight['Destination']
         cleanServiceDistance(flight)
         distance = float(flight['distance_km'])
         distance = abs(distance)
@@ -98,12 +100,12 @@ def addRouteStop(itinerary, flight):
     """
     Agrega a un aeropuerto, una aerolinea que es servida en ese aeropuerto
     """
-    entry = m.get(itinerary['Airports'], flight["Departure"])
+    entry = m.get(itinerary['Airports Departures'], flight["Departure"])
 
     if entry is None:
         lstroutes = lt.newList(cmpfunction=compareroutes)
         lt.addLast(lstroutes, flight['Airline'])
-        m.put(itinerary['Airports'], flight['Destination'], lstroutes)
+        m.put(itinerary['Airports Departures'], flight['Departure'], lstroutes)
 
     else:
         lstroutes = entry['value']
@@ -112,16 +114,16 @@ def addRouteStop(itinerary, flight):
             lt.addLast(lstroutes, info)
     return itinerary
 
-def addRouteConnections(itinerary):
+def addRouteConnections2(itinerary):
     """
     Por cada vertice (cada aeropuerto) se recorre la lista
     de rutas servidas en dicha estación y se crean
     arcos entre ellas para representar el cambio de ruta
     que se puede realizar en una estación.
     """
-    lststops = m.keySet(itinerary['Airports'])
+    lststops = m.keySet(itinerary['Airports Departures'])
     for key in lt.iterator(lststops):
-        lstroutes = m.get(itinerary['Airports'], key)['value']
+        lstroutes = m.get(itinerary['Airports Departures'], key)['value']
         prevrout = None
         for route in lt.iterator(lstroutes):
             route = key + '-' + route
@@ -129,6 +131,20 @@ def addRouteConnections(itinerary):
                 addConnection(itinerary, prevrout, route, 0)
                 addConnection(itinerary, route, prevrout, 0)
             prevrout = route
+
+def addRouteConnections(itinerary):
+    """
+    Por cada vertice (cada aeropuerto) se recorre la lista
+    de rutas servidas en dicha estación y se crean
+    arcos entre ellas para representar el cambio de ruta
+    que se puede realizar en una estación.
+    """
+    lststops = m.keySet(itinerary['Airports Departures'])
+    for key in lt.iterator(lststops):
+        lstroutes = m.get(itinerary['Airports Departures'], key)['value']
+        for route in lt.iterator(lstroutes):
+            route = key + '-' + route
+            addConnection(itinerary, key, route, 0)
 
 def addConnection(analyzer, origin, destination, distance):
     """
@@ -149,7 +165,6 @@ def totalStops(analyzer):
     """
     return gr.numVertices(analyzer['Flights Network'])
 
-
 def totalConnections(analyzer):
     """
     Retorna el total arcos del grafo
@@ -168,12 +183,21 @@ def cleanServiceDistance(route):
     if route['distance_km'] == '':
         route['distance_km'] = 0
 
-def formatVertex(route):
+def formatVertexDeparture(route):
     """
     Se formatea el nombre del vertice con el IATA del Aeropuerto
     seguido de la ruta.
     """
     name = route['Departure'] + '-'
+    name = name + route['Airline']
+    return name
+
+def formatVertexDestination(route):
+    """
+    Se formatea el nombre del vertice con el IATA del Aeropuerto
+    seguido de la ruta.
+    """
+    name = route['Destination'] + '-'
     name = name + route['Airline']
     return name
 
