@@ -30,31 +30,42 @@ assert config
 
 def printMenu():
     print("\n")
-    print("*******************************************")
-    print("Bienvenido")
-    print("1- Inicializar Analizador")
-    print("2- Cargar información de vuelos y aeropuertos")
+    print("____________________________________________________________")
+    print("                   Welcome to AirTravel                     ")
+    print('''
+            _______
+            _\ _~-\___
+    =  = ==(____AA____D
+                \_____\___________________,-~~~~~~~`-.._
+                /     o O o o o o O O o o o o o o O o  |\_
+                `~-.__        ___..----..                  )
+                      `---~~\___________/------------`````
+                      =  ===(_________D''')
+    print("\n1- Start Itinerary ")
+    print("2- Load flights and aiports information.")
     print("3- ")
     print("4- ")
     print("5- ")
     print("6-  ")
     print("7-  ")
-    print("0- Salir")
-    print("*******************************************")
+    print("0- Exit.")
+    print("____________________________________________________________")
 
 
-def optionTwo(cont):
-    print("\nCargando información de aeropuertos y rutas ....")
-    controller.loadServices(cont)
-    print(cont["Airports"])
-    print(n)
-    numedges = controller.totalConnections(cont)
-    numvertex = controller.totalStops(cont)
-    print('Numero de vertices: ' + str(numvertex))
-    print('Numero de arcos: ' + str(numedges))
-    print('El limite de recursion actual: ' + str(sys.getrecursionlimit()))
-
-
+def loadData(itinerary):
+    print("\n Loading airport and route information ....")
+    controller.loadItinerary(itinerary)
+    numedges = controller.totalConnections(itinerary)
+    numvertex = controller.totalAirports(itinerary)
+    print("\nFlights Network")
+    print('Number of airport: ' + str(numvertex))
+    print('Number of flights: ' + str(numedges))
+    print(' ')
+    numedges = controller.totalConnections2(itinerary)
+    numvertex = controller.totalAirports2(itinerary)
+    print("\nCities Airports")
+    print('Number of airport and Cities: ' + str(numvertex))
+    print('Number of flights: ' + str(numedges))
 
 """
 Menu principal
@@ -64,20 +75,19 @@ itinerary = None
 def thread_cycle():
     while True:
         printMenu()
-        inputs = input('Seleccione una opción para continuar\n>')
+        inputs = input('Select an option to continue: ')
 
         if int(inputs[0]) == 1:
-            print("\nInicializando....")
+            print("\nStarting....")
             # cont es el controlador que se usará de acá en adelante
-            itinerary = controller.init()
+            itinerary = controller.initItinerary()
 
         elif int(inputs[0]) == 2:
-            optionTwo(itinerary)
+            loadData(itinerary)
 
         else:
             sys.exit(0)
     sys.exit(0)
-
 
 if __name__ == "__main__":
     threading.stack_size(67108864)  # 64MB stack
