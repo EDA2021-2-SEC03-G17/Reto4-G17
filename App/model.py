@@ -51,15 +51,16 @@ def newItinerary():
                     'Airports': None,
                     "Flights Network": None,
                     'Round Trip':None,
-                    'City Airports':None
+                    'City Airports':None,
+                    'Direct flights':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
         itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
         itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Round Trip'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
-        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-
+        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
         return itinerary
 
     except Exception as exp:
@@ -111,7 +112,7 @@ def addCity (itinerary, city):
     Adiciona el nombre de la ciudad es ASCII al grafo City Airports
     """
     cityName = city["city_ascii"]
-    lt.addLast(itinerary['CITIES'], city)
+    lt.addLast(itinerary['CityInfo'], city)
     addVertex(itinerary['City Airports'], cityName)
     addCityAiportsConnections(itinerary,city, cityName)
 
@@ -124,10 +125,19 @@ def addFlightConnections(itinerary, flight):
         distance = float(flight['distance_km'])
         distance = abs(distance)
         addArch(itinerary['Flights Network'], origin, destination, distance)
+        LookDirectFlights(itinerary,origin, destination, distance)
         return itinerary
 
     except Exception as exp:
         error.reraise(exp, 'model:addStopConnection')
+
+def LookDirectFlights(itinerary,origin,destination, distance):
+    edgeOD = gr.getEdge(itinerary['Flights Network'],origin, destination)
+    edgeDO = gr.getEdge(itinerary['Flights Network'],destination, origin)
+    if edgeOD != None and edgeDO != None:
+        addVertex(itinerary['Direct flights'],origin)
+        addVertex(itinerary['Direct flights'],destination)
+        addArch(itinerary['Direct flights'],origin, destination, distance)
 
 def addVertex(itinerary, newvertex):
     """
@@ -151,7 +161,6 @@ def addArch(itinerary, origin, destination, distance):
         gr.addEdge(itinerary, origin, destination, distance)
     return itinerary
 
-# No es buena idea
 
 def addCity2 (itinerary, city):
     """
@@ -199,6 +208,15 @@ def totalConnections(itinerary):
     """
     return gr.numEdges(itinerary)
 
+def AirportsInfo(itinerary):
+    """
+    Retorna la info del primer aeropuerto
+    """    
+    keys = m.keySet(itinerary)
+    firstkey = lt.firstElement(keys)
+    pair = m.get(itinerary, firstkey)
+    info = me.getValue(pair)
+    return info
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones Helper

@@ -26,6 +26,7 @@ import config
 import threading
 from App import controller
 from DISClib.ADT import stack
+from DISClib.ADT import list as lt
 assert config
 
 def printMenu():
@@ -66,7 +67,15 @@ def loadData(itinerary):
     print("\nCities Airports")
     print('Number of airport and Cities: ' + str(numvertex))
     print('Number of flights: ' + str(numedges))
+    
+    numedges = controller.totalConnections3(itinerary)
+    numvertex = controller.totalAirports3(itinerary)
+    print("\nDirect flights")
+    print('Number of airports: ' + str(numvertex))
+    print('Number of flights: ' + str(numedges))
 
+    print('The total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
+    print('The first airport loaded was ' + str(controller.Firstairport(itinerary)))
 """
 Menu principal
 """

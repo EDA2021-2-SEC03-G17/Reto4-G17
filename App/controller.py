@@ -103,3 +103,19 @@ def totalConnections2(itinerary):
     Total de enlaces entre las paradas
     """
     return model.totalConnections(itinerary['City Airports'])
+
+def totalConnections3(itinerary):
+    """
+    Total de enlaces entre las paradas
+    """
+    return model.totalConnections(itinerary['Direct flights'])
+
+def totalAirports3(itinerary):
+    """
+    Total de paradas de autobus
+    """
+    return model.totalAirports(itinerary['Direct flights'])
+
+def Firstairport(itinerary):
+
+    return model.AirportsInfo(itinerary['Airports'])
