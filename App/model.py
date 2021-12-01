@@ -296,3 +296,35 @@ def compareroutes(route1, route2):
         return 1
     else:
         return -1
+
+# Requerimientos
+#Requerimiento 3
+def SameNamesOrigin(origin, itinerary):
+    cities = itinerary['CityInfo']
+    origin_information = []
+    for city in lt.iterator(cities):
+        if city['city_ascii'] == origin:
+            city_info = {'City':city['city_ascii'],
+                         'Country':city['country'],
+                         'Latitude':city['lat'],
+                         'Longitude':city['lng']}
+            origin_information.append(city_info)
+    return origin_information
+
+def SameNamesDestination(destination, itinerary):
+    cities = itinerary['CityInfo']
+    destination_information = []
+    for city in lt.iterator(cities):
+        if city['city_ascii'] == destination:
+                city_info = {'City':city['city_ascii'],
+                            'Country':city['country'],
+                            'Latitude':city['lat'],
+                            'Longitude':city['lng']}
+                destination_information.append(city_info)
+    return destination_information
+
+def MinRoute(origin, destination, itinerary):
+    """
+    WORK IN PROGRESS
+    """
+    return origin, destination

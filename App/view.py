@@ -46,7 +46,7 @@ def printMenu():
     print("2- Load flights and aiports information.")
     print("3- ")
     print("4- ")
-    print("5- ")
+    print("5- Find the minimum route between two cities")
     print("6-  ")
     print("7-  ")
     print("0- Exit.")
@@ -76,6 +76,17 @@ def loadData(itinerary):
 
     print('The total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
     print('The first airport loaded was ' + str(controller.Firstairport(itinerary)))
+
+def homonymOrigin(origin,itinerary):
+    SameNamesOrigin = controller.SameNamesOrigin(origin,itinerary)
+    return SameNamesOrigin
+
+def homonymDestination(destination, itinerary):
+    SameNamesDestination = controller.SameNamesDestination(destination,itinerary)
+    return SameNamesDestination
+
+def req3(origin,destination,itinerary):
+    return controller.MinRoute(origin, destination, itinerary)
 """
 Menu principal
 """
@@ -93,6 +104,24 @@ def thread_cycle():
 
         elif int(inputs[0]) == 2:
             loadData(itinerary)
+
+        elif int(inputs[0]) == 5:
+            origin = input('Please input your origin\n')
+            list_cities = homonymOrigin(origin,itinerary)
+            if len(list_cities) > 1:
+                print('There is more than 1 city with the same name, please choose a single one:\n')
+                print(list_cities)
+                index = input('Enter the position of the city you chose\n')
+                origin = list_cities[int(index)]
+
+            destination = input('Please input you destination\n')
+            list_destinations = homonymDestination(destination,itinerary)
+            if len(list_destinations) > 1:
+                print('There is more than 1 city with the same name, please choose a single one:\n')
+                print(list_destinations)
+                index = input('Enter the position of the city you chose\n')
+                destination = list_destinations[int(index)]
+            print(req3(origin, destination, itinerary))
 
         else:
             sys.exit(0)
