@@ -42,9 +42,9 @@ def printMenu():
                 `~-.__        ___..----..                  )
                       `---~~\___________/------------`````
                       =  ===(_________D''')
-    print("\n1- Start Itinerary ")
+    print("\n1- Start Itinerary. ")
     print("2- Load flights and aiports information.")
-    print("3- ")
+    print("3- Air interconnection points. ")
     print("4- ")
     print("5- ")
     print("6-  ")
@@ -52,9 +52,8 @@ def printMenu():
     print("0- Exit.")
     print("____________________________________________________________")
 
-
 def loadData(itinerary):
-    print("\n Loading airport and route information ....")
+    print("\nLoading airport and route information ....")
     controller.loadItinerary(itinerary)
     numedges = controller.totalConnections(itinerary)
     numvertex = controller.totalAirports(itinerary)
@@ -62,6 +61,7 @@ def loadData(itinerary):
     print('Number of airport: ' + str(numvertex))
     print('Number of flights: ' + str(numedges))
     print(' ')
+
     numedges = controller.totalConnections2(itinerary)
     numvertex = controller.totalAirports2(itinerary)
     print("\nCities Airports")
@@ -74,8 +74,35 @@ def loadData(itinerary):
     print('Number of airports: ' + str(numvertex))
     print('Number of flights: ' + str(numedges))
 
-    print('The total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
+    print('\nThe total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
     print('The first airport loaded was ' + str(controller.Firstairport(itinerary)))
+    print('The last city loaded was '+ str(controller.lastCity(itinerary)))
+
+#Requirement No.1
+
+def moreFlights (itinerary):
+    points = controller.moreFlights(itinerary)
+    print('\n')
+    for point in lt.iterator(points):
+        print(point)
+
+#Requirement No.2
+
+
+#Requirement No.3
+
+def shortRoute (itinerary):
+    route = controller.shortRoute(itinerary)
+    print(route)
+
+#Requirement No.4
+
+
+#Requirement No.5
+
+
+#Requirement No.6
+
 """
 Menu principal
 """
@@ -88,11 +115,25 @@ def thread_cycle():
 
         if int(inputs[0]) == 1:
             print("\nStarting....")
-            # cont es el controlador que se usará de acá en adelante
             itinerary = controller.initItinerary()
 
         elif int(inputs[0]) == 2:
             loadData(itinerary)
+
+        elif int(inputs[0]) == 3:
+            moreFlights(itinerary)
+
+        elif int(inputs[0]) == 4:
+            pass
+
+        elif int(inputs[0]) == 5:
+            shortRoute(itinerary)
+
+        elif int(inputs[0]) == 6:
+            pass
+
+        elif int(inputs[0]) == 7:
+            pass
 
         else:
             sys.exit(0)

@@ -48,23 +48,25 @@ def newItinerary():
     """
     try:
         itinerary = {
+                    'CityInfo': None,
                     'Airports': None,
                     "Flights Network": None,
                     'Round Trip':None,
-                    'City Airports':None,
-                    'Direct flights':None
+                    'Cities':None,
+                    'City Airports':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
-        itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
+        itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING')
         itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Round Trip'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
-        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING')
+        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
+
         return itinerary
 
     except Exception as exp:
-        error.reraise(exp, 'model:newAnalyzer')
+        error.reraise(exp, 'model:Itinerary')
 
 # Funciones para creacion de datos
 
@@ -139,6 +141,25 @@ def LookDirectFlights(itinerary,origin,destination, distance):
         addVertex(itinerary['Direct flights'],destination)
         addArch(itinerary['Direct flights'],origin, destination, distance)
 
+def addCityAiportsConnections (itinerary,city, cityName):
+    """
+    Se recorre el map de aeropuertos y se crean
+    arcos entre el aeropuerto y la ciudad en la que se encuentran.
+    """
+    latCity = float(city['lat'])
+    lngCity = float(city['lng'])
+
+    InMap = m.get(itinerary["Cities"],cityName)
+    if InMap !=None:
+        Airports = me.getValue(InMap)
+        for airport in lt.iterator(Airports):
+            AirportsInfo=m.get(itinerary["Airports"],airport)["value"]
+            latAirport = AirportsInfo["Latitude"]
+            lngAirport = AirportsInfo["Longitude"]
+            distancia = points2distance([latCity,lngCity],[latAirport,lngAirport])
+            addVertex(itinerary['City Airports'],airport)
+            addArch(itinerary['City Airports'],city["city_ascii"],airport,distancia)
+
 def addVertex(itinerary, newvertex):
     """
     Adiciona un vertice del grafo
@@ -161,38 +182,53 @@ def addArch(itinerary, origin, destination, distance):
         gr.addEdge(itinerary, origin, destination, distance)
     return itinerary
 
+#Requirement No.1
 
-def addCity2 (itinerary, city):
+def moreFlights(flightsNetwork,airportdata):
     """
-    Adiciona el nombre de la ciudad es ASCII al grafo City Airports
+    Retorna la estación que sirve a mas rutas.
+    Si existen varias rutas con el mismo numero se
+    retorna una de ellas
     """
-    cityName = city["city_ascii"]
-    listairports=lt.newList()
-    m.put(itinerary['City Airports2'], cityName, listairports)
+    lstvert = gr.vertices(flightsNetwork)
+    
+    points=None
+    maxdeg = -1
 
-    lstAirports = m.keySet(itinerary['Airports'])
-    for key in lt.iterator(lstAirports):
-        AirportsInfo = m.get(itinerary['Airports'], key)['value']
-        m.put(itinerary['City Airports2'], AirportsInfo['City'], key)
+    for vertex in lt.iterator(lstvert):
+        degree = gr.degree(flightsNetwork,vertex)
+    
+        if(degree > maxdeg):
+            points=lt.newList('ARRAY_LIST')
+            infovertex={"Airport":vertex,
+            'Info':m.get(airportdata,vertex)['value'],
+            "Size":degree}
+            lt.addLast(points,infovertex)
+            maxdeg = degree
+        
+        elif (degree==maxdeg):
+            infovertex={"Airport":vertex,
+            'Info':m.get(airportdata,vertex)['value'],
+            "Size":degree}
+            lt.addLast(points,infovertex)
 
-def addCityAiportsConnections (itinerary,city, cityName):
-    """
-    Se recorre el map de aeropuertos y se crean
-    arcos entre el aeropuerto y la ciudad en la que se encuentran.
-    """
-    latCity = float(city['lat'])
-    lngCity = float(city['lng'])
+    return points
 
-    InMap = m.get(itinerary["Cities"],cityName)
-    if InMap !=None:
-        Airports = me.getValue(InMap)
-        for airport in lt.iterator(Airports):
-            AirportsInfo=m.get(itinerary["Airports"],airport)["value"]
-            latAirport = AirportsInfo["Latitude"]
-            lngAirport = AirportsInfo["Longitude"]
-            distancia = points2distance([latCity,lngCity],[latAirport,lngAirport])
-            addVertex(itinerary['City Airports'],airport)
-            addArch(itinerary['City Airports'],city["city_ascii"],airport,distancia)
+#Requirement No.2
+
+
+#Requirement No.3
+
+def shortRoute (CityAirport,flightsNetwork):
+    print(gr.vertices(CityAirport))
+
+#Requirement No.4
+
+
+#Requirement No.5
+
+
+#Requirement No.6
 
 # Funciones de consulta
 
@@ -208,7 +244,7 @@ def totalConnections(itinerary):
     """
     return gr.numEdges(itinerary)
 
-def AirportsInfo(itinerary):
+def AirportInfo(itinerary):
     """
     Retorna la info del primer aeropuerto
     """    
@@ -217,6 +253,10 @@ def AirportsInfo(itinerary):
     pair = m.get(itinerary, firstkey)
     info = me.getValue(pair)
     return info
+
+def cityInfo(itinerary):
+    return lt.lastElement(itinerary)
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones Helper
@@ -271,6 +311,8 @@ def points2distance(start,  end):
     a = math.sin(d_latt/2)**2 + math.cos(start_latt) * math.cos(end_latt) * math.sin(d_long/2)**2
     c = 2 * math.asin(math.sqrt(a))
     return 6371 * c
+
+'''FUNCIONES TOMADAS DE http://www.codecodex.com/wiki/Calculate_Distance_Between_Two_Points_on_a_Globe#Python'''
 
 # Funciones de ordenamiento
 

@@ -76,6 +76,27 @@ def loadFlights(itinerary):
         model.addFlightConnections(itinerary, route)
     print('Flights: Done')
 
+#Requirement No.1
+
+def moreFlights(itinerary):
+    return model.moreFlights(itinerary['Flights Network'],itinerary['Airports'])
+
+#Requirement No.2
+
+
+#Requirement No.3
+
+def shortRoute (itinerary):
+     return model.shortRoute(itinerary['City Airports'],itinerary['Flights Network'])
+
+#Requirement No.4
+
+
+#Requirement No.5
+
+
+#Requirement No.6
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
@@ -117,5 +138,7 @@ def totalAirports3(itinerary):
     return model.totalAirports(itinerary['Direct flights'])
 
 def Firstairport(itinerary):
+    return model.AirportInfo(itinerary['Airports'])
 
-    return model.AirportsInfo(itinerary['Airports'])
+def lastCity(itinerary):
+    return model.cityInfo(itinerary["CityInfo"])
