@@ -127,7 +127,7 @@ def addFlightConnections(itinerary, flight):
         cleanDistance(flight)
         distance = float(flight['distance_km'])
         distance = abs(distance)
-        addArch(itinerary['Flights Network'], origin, destination, distance)
+        addAllArch(itinerary['Flights Network'], origin, destination, distance)
         LookDirectFlights(itinerary,origin, destination, distance)
         return itinerary
 
@@ -191,8 +191,22 @@ def addAllArch(itinerary, origin, destination, distance):
     return itinerary
 
 #Requirement No.1
-
 def moreFlights(flightsNetwork,airportdata):
+    lstvert = gr.vertices(flightsNetwork)
+    ordvert=lt.newList('SINGLE_LINKED')
+
+    for vertex in lt.iterator(lstvert):
+        degree = gr.degree(flightsNetwork,vertex)
+        infovert={'Airport':vertex, 'Info': m.get(airportdata,vertex)['value'], 'Arch':int(degree)}
+        lt.addLast(ordvert,infovert)
+    sa.sort(ordvert,maxarch)
+
+    return lt.subList(ordvert,1,5)
+    
+def maxarch (airport1, airport2):
+    return airport1['Arch']>airport2['Arch']
+
+def moreFlights2(flightsNetwork,airportdata):
     """
     Retorna la estación que sirve a mas rutas.
     Si existen varias rutas con el mismo numero se
@@ -226,6 +240,8 @@ def moreFlights(flightsNetwork,airportdata):
 
 
 #Requirement No.3
+def shortRoute2 (CityAirport,flightsNetwork):
+    print(gr.getVertex())
 
 def shortRoute (CityAirport,flightsNetwork):
     print(gr.vertices(CityAirport))
@@ -336,3 +352,35 @@ def compareroutes(route1, route2):
         return 1
     else:
         return -1
+
+# Requerimientos
+#Requerimiento 3
+def SameNamesOrigin(origin, itinerary):
+    cities = itinerary['CityInfo']
+    origin_information = []
+    for city in lt.iterator(cities):
+        if city['city_ascii'] == origin:
+            city_info = {'City':city['city_ascii'],
+                         'Country':city['country'],
+                         'Latitude':city['lat'],
+                         'Longitude':city['lng']}
+            origin_information.append(city_info)
+    return origin_information
+
+def SameNamesDestination(destination, itinerary):
+    cities = itinerary['CityInfo']
+    destination_information = []
+    for city in lt.iterator(cities):
+        if city['city_ascii'] == destination:
+                city_info = {'City':city['city_ascii'],
+                            'Country':city['country'],
+                            'Latitude':city['lat'],
+                            'Longitude':city['lng']}
+                destination_information.append(city_info)
+    return destination_information
+
+def MinRoute(origin, destination, itinerary):
+    """
+    WORK IN PROGRESS
+    """
+    return origin, destination

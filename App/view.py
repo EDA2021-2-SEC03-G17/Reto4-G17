@@ -46,7 +46,7 @@ def printMenu():
     print("2- Load flights and aiports information.")
     print("3- Air interconnection points. ")
     print("4- ")
-    print("5- ")
+    print("5- Find the minimum route between two cities.")
     print("6-  ")
     print("7-  ")
     print("0- Exit.")
@@ -57,29 +57,32 @@ def loadData(itinerary):
     controller.loadItinerary(itinerary)
     numedges = controller.totalConnections(itinerary)
     numvertex = controller.totalAirports(itinerary)
-    print("\n=== Flights Network DiGraph===" )
+    print("\n=== Flights Network DiGraph ===" )
     print('Number of airport: ' + str(numvertex))
     print('Number of flights: ' + str(numedges))
-    print(' ')
 
     numedges = controller.totalConnections3(itinerary)
     numvertex = controller.totalAirports3(itinerary)
     #No son 39 rutas puesto que no hay arcos repetidos pues no se tienen en cuenta las aerolineas
-    print("\n === Direct Flights Graph===")
-    print('Number of airports: ' + str(numvertex) + '/' + '    Number of flights: ' + str(numedges))
-    
+    print("\n === Direct Flights Graph ===")
+    print('Number of airports: ' + str(numvertex))
+    print('Number of flights: ' + str(numedges))
+
     numedges = controller.totalConnections2(itinerary)
     numvertex = controller.totalAirports2(itinerary)
     #No son 16 rutas puesto que no hay arcos repetidos pues no se tienen en cuenta las aerolineas
-    print("\nCities Airports")
-    print('Number of airport and Cities: ' + str(numvertex)+ '/' + '    Number of flights: ' + str(numedges))
-    
+    print("\n=== Cities Airports ===")
+    print('Number of airport and Cities: ' + str(numvertex))
+    print('Number of flights: ' + str(numedges)) 
     print('\nThe total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
-    print('The first and last city loaded were '+ str(controller.lastCity(itinerary)))
+    print('The first and last city loaded were: ')
+    for element in controller.lastCity(itinerary):
+        print (element)
 
     print('\nThe total number of airports is: ')
-    print('The first airport loaded was ' + str(controller.Firstairport(itinerary)))
-   
+    print('The first and last airport loaded were: ')
+    for element in controller.Firstairport(itinerary):
+        print (element)
 
 #Requirement No.1
 
@@ -94,6 +97,24 @@ def moreFlights (itinerary):
 
 #Requirement No.3
 
+def requirement3(itinerary):
+    origin = input('Please input your origin\n')
+    list_cities = homonymOrigin(origin,itinerary)
+    if len(list_cities) > 1:
+        print('There is more than 1 city with the same name, please choose a single one:\n')
+        print(list_cities)
+        index = input('Enter the position of the city you chose\n')
+        origin = list_cities[int(index)]
+
+    destination = input('Please input you destination\n')
+    list_destinations = homonymDestination(destination,itinerary)
+    if len(list_destinations) > 1:
+        print('There is more than 1 city with the same name, please choose a single one:\n')
+        print(list_destinations)
+        index = input('Enter the position of the city you chose\n')
+        destination = list_destinations[int(index)]
+    print(req3(origin, destination, itinerary))
+
 def shortRoute (itinerary):
     route = controller.shortRoute(itinerary)
     print(route)
@@ -105,6 +126,19 @@ def shortRoute (itinerary):
 
 
 #Requirement No.6
+
+#HELP FUNCTIONS
+
+def homonymOrigin(origin,itinerary):
+    SameNamesOrigin = controller.SameNamesOrigin(origin,itinerary)
+    return SameNamesOrigin
+
+def homonymDestination(destination, itinerary):
+    SameNamesDestination = controller.SameNamesDestination(destination,itinerary)
+    return SameNamesDestination
+
+def req3(origin,destination,itinerary):
+    return controller.MinRoute(origin, destination, itinerary)
 
 """
 Menu principal
@@ -137,7 +171,7 @@ def thread_cycle():
 
         elif int(inputs[0]) == 7:
             pass
-
+            
         else:
             sys.exit(0)
     sys.exit(0)
