@@ -51,17 +51,16 @@ def newItinerary():
                     'CityInfo': None,
                     'Airports': None,
                     "Flights Network": None,
-                    'Round Trip':None,
                     'Cities':None,
                     'City Airports':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
+        itinerary['AirportInfo'] = lt.newList('ARRAY_LIST')
         itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING')
-        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-        itinerary['Round Trip'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING')
-        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-        itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000,comparefunction=compareStopIds)
+        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=None)
+        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000, comparefunction=compareStopIds)
+        itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000, comparefunction=compareStopIds)
 
         return itinerary
 
@@ -76,7 +75,9 @@ def addAirports (itinerary, airport):
     y tambien guarda la informacion del aeropuerto en el mapa Airports
     """
     airportIATA = airport['IATA']
+    lt.addLast(itinerary['AirportInfo'],airport)
     addVertex(itinerary['Flights Network'], airportIATA)
+    addVertex(itinerary['Direct flights'], airportIATA)
     addAirportInfo(itinerary['Airports'], airportIATA, airport)
     addCityAirports(itinerary['Cities'], airportIATA, airport)
 
@@ -103,7 +104,7 @@ def addCityAirports(cityMap,airportIATA, airport):
     if cityIs == None:
         listairports=lt.newList('SINGLE_LINKED')
         lt.addLast(listairports,airportIATA)
-        m.put(cityMap, airport["City"], listairports)
+        m.put(cityMap, airport['Country']+'-'+airport["City"], listairports)
 
     else:
         listairports=cityIs['values']
@@ -113,7 +114,7 @@ def addCity (itinerary, city):
     """
     Adiciona el nombre de la ciudad es ASCII al grafo City Airports
     """
-    cityName = city["city_ascii"]
+    cityName = city['country']+'-'+city["city_ascii"]
     lt.addLast(itinerary['CityInfo'], city)
     addVertex(itinerary['City Airports'], cityName)
     addCityAiportsConnections(itinerary,city, cityName)
@@ -136,9 +137,8 @@ def addFlightConnections(itinerary, flight):
 def LookDirectFlights(itinerary,origin,destination, distance):
     edgeOD = gr.getEdge(itinerary['Flights Network'],origin, destination)
     edgeDO = gr.getEdge(itinerary['Flights Network'],destination, origin)
-    if edgeOD != None and edgeDO != None:
-        addVertex(itinerary['Direct flights'],origin)
-        addVertex(itinerary['Direct flights'],destination)
+
+    if edgeOD != None and edgeDO != None: 
         addArch(itinerary['Direct flights'],origin, destination, distance)
 
 def addCityAiportsConnections (itinerary,city, cityName):
@@ -158,7 +158,7 @@ def addCityAiportsConnections (itinerary,city, cityName):
             lngAirport = AirportsInfo["Longitude"]
             distancia = points2distance([latCity,lngCity],[latAirport,lngAirport])
             addVertex(itinerary['City Airports'],airport)
-            addArch(itinerary['City Airports'],city["city_ascii"],airport,distancia)
+            addArch(itinerary['City Airports'],cityName,airport,distancia)
 
 def addVertex(itinerary, newvertex):
     """
@@ -180,6 +180,14 @@ def addArch(itinerary, origin, destination, distance):
     edge = gr.getEdge(itinerary, origin, destination)
     if edge is None:
         gr.addEdge(itinerary, origin, destination, distance)
+    return itinerary
+
+def addAllArch(itinerary, origin, destination, distance):
+    """
+    Adiciona un arco entre dos vertices independientemente si este arco ya se encuentra en el grafo
+    """
+    #print(origin, "-",destination,"-", distance)
+    gr.addEdge(itinerary, origin, destination, distance)
     return itinerary
 
 #Requirement No.1
@@ -244,18 +252,8 @@ def totalConnections(itinerary):
     """
     return gr.numEdges(itinerary)
 
-def AirportInfo(itinerary):
-    """
-    Retorna la info del primer aeropuerto
-    """    
-    keys = m.keySet(itinerary)
-    firstkey = lt.firstElement(keys)
-    pair = m.get(itinerary, firstkey)
-    info = me.getValue(pair)
-    return info
-
 def cityInfo(itinerary):
-    return lt.lastElement(itinerary)
+    return dict(lt.firstElement(itinerary)),dict(lt.lastElement(itinerary))
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

@@ -57,26 +57,29 @@ def loadData(itinerary):
     controller.loadItinerary(itinerary)
     numedges = controller.totalConnections(itinerary)
     numvertex = controller.totalAirports(itinerary)
-    print("\nFlights Network")
+    print("\n=== Flights Network DiGraph===" )
     print('Number of airport: ' + str(numvertex))
     print('Number of flights: ' + str(numedges))
     print(' ')
 
-    numedges = controller.totalConnections2(itinerary)
-    numvertex = controller.totalAirports2(itinerary)
-    print("\nCities Airports")
-    print('Number of airport and Cities: ' + str(numvertex))
-    print('Number of flights: ' + str(numedges))
-    
     numedges = controller.totalConnections3(itinerary)
     numvertex = controller.totalAirports3(itinerary)
-    print("\nDirect flights")
-    print('Number of airports: ' + str(numvertex))
-    print('Number of flights: ' + str(numedges))
-
+    #No son 39 rutas puesto que no hay arcos repetidos pues no se tienen en cuenta las aerolineas
+    print("\n === Direct Flights Graph===")
+    print('Number of airports: ' + str(numvertex) + '/' + '    Number of flights: ' + str(numedges))
+    
+    numedges = controller.totalConnections2(itinerary)
+    numvertex = controller.totalAirports2(itinerary)
+    #No son 16 rutas puesto que no hay arcos repetidos pues no se tienen en cuenta las aerolineas
+    print("\nCities Airports")
+    print('Number of airport and Cities: ' + str(numvertex)+ '/' + '    Number of flights: ' + str(numedges))
+    
     print('\nThe total number of cities is: ' + str(lt.size(itinerary['CityInfo'])))
+    print('The first and last city loaded were '+ str(controller.lastCity(itinerary)))
+
+    print('\nThe total number of airports is: ')
     print('The first airport loaded was ' + str(controller.Firstairport(itinerary)))
-    print('The last city loaded was '+ str(controller.lastCity(itinerary)))
+   
 
 #Requirement No.1
 

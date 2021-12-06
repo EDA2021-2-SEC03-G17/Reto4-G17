@@ -51,7 +51,7 @@ def loadItinerary(itinerary):
 
 def loadAirport(itinerary):
 
-    airportsfile = cf.data_dir + "airports_full.csv"
+    airportsfile = cf.data_dir + "airports-utf8-small.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
     input_file = csv.DictReader(open(airportsfile, encoding='utf-8'))
     for airport in input_file:
@@ -61,7 +61,7 @@ def loadAirport(itinerary):
 def loadCities(itinerary):
 
     citiesfile = cf.data_dir + "worldcities.csv"
-    #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
+    #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto4-G17\
     input_file = csv.DictReader(open(citiesfile, encoding='utf-8'))
     for city in input_file:
         model.addCity(itinerary, city)
@@ -69,7 +69,7 @@ def loadCities(itinerary):
 
 def loadFlights(itinerary):
 
-    flightsfile = cf.data_dir + "routes_full.csv"
+    flightsfile = cf.data_dir + "routes-utf8-small.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
     input_file = csv.DictReader(open(flightsfile, encoding='utf-8'))
     for route in input_file:
@@ -138,7 +138,7 @@ def totalAirports3(itinerary):
     return model.totalAirports(itinerary['Direct flights'])
 
 def Firstairport(itinerary):
-    return model.AirportInfo(itinerary['Airports'])
+    return model.cityInfo(itinerary['AirportInfo'])
 
 def lastCity(itinerary):
     return model.cityInfo(itinerary["CityInfo"])
