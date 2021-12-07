@@ -60,7 +60,7 @@ def loadAirport(itinerary):
     
 def loadCities(itinerary):
 
-    citiesfile = cf.data_dir + "worldcities.csv"
+    citiesfile = cf.data_dir + "worldcities-utf8.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto4-G17\
     input_file = csv.DictReader(open(citiesfile, encoding='utf-8'))
     for city in input_file:
@@ -85,15 +85,42 @@ def moreFlights(itinerary):
 
 
 #Requirement No.3
+def findclosestairport(itinerary,vertex):
+    return model.findclosestairport(itinerary,vertex)
 
-def shortRoute (itinerary):
-     return model.shortRoute(itinerary['City Airports'],itinerary['Flights Network'])
+def SameNamesOrigin(origin, itinerary):
+    return model.SameNamesCityDestiny(origin,itinerary)
 
+def SameNamesDestination(destination, itinerary):
+    return model.SameNamesCityDestiny(destination,itinerary)
+
+def MinRoute(origin, destination, itinerary):
+    return model.MinRoute(origin, destination, itinerary) 
+
+def MinRouteOneAirport(origin, destinatination, itinerary):
+    return model.oneairportoncity_nosearch(origin, destinatination, itinerary)
+
+def getinfoAirport (itinerary,key):
+    return model.getinfoAirport(itinerary,key)
 #Requirement No.4
 
 
 #Requirement No.5
 
+def closedAirport(itinerary,airport):
+    return model.closedAirport(itinerary,airport)
+
+def totalConnections5(itinerary):
+    """
+    Total de enlaces entre las paradas
+    """
+    return model.totalConnections(itinerary)
+
+def totalAirports5(itinerary):
+    """
+    Total de paradas de autobus
+    """
+    return model.totalAirports(itinerary)
 
 #Requirement No.6
 

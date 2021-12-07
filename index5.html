@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_60cebcd7a627481fb011decb329430e7 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_60cebcd7a627481fb011decb329430e7" ></div>
+        
+</body>
+<script>    
+    
+            var map_60cebcd7a627481fb011decb329430e7 = L.map(
+                "map_60cebcd7a627481fb011decb329430e7",
+                {
+                    center: [0, 0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 1,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_aafc9a73accd45efb103b67a16551a43 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+            var marker_ad574a30be004a53988953c6d2c6ce0a = L.marker(
+                [38.7813, -9.13592],
+                {}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+        var popup_96fd1492172f4ce1a665389b7f7a499b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2c98527353ba4ec386987bd98ca02d26 = $(`<div id="html_2c98527353ba4ec386987bd98ca02d26" style="width: 100.0%; height: 100.0%;">Humberto Delgado Airport (Lisbon Portela Airport)</div>`)[0];
+            popup_96fd1492172f4ce1a665389b7f7a499b.setContent(html_2c98527353ba4ec386987bd98ca02d26);
+        
+
+        marker_ad574a30be004a53988953c6d2c6ce0a.bindPopup(popup_96fd1492172f4ce1a665389b7f7a499b)
+        ;
+
+        
+    
+    
+            var poly_line_2b3e9510b2d84c408c5fe232ea68e33f = L.polyline(
+                [[25.25279999, 55.36439896], [38.7813, -9.13592]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 15}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+            var marker_bf9493a3f54443f0a688eb371b010b1e = L.marker(
+                [59.8003006, 30.26250076],
+                {}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+        var popup_512b1b16e57b4d56bd91cde9c79c64a5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_667c4d529dbc48a693e91c0c2eef173d = $(`<div id="html_667c4d529dbc48a693e91c0c2eef173d" style="width: 100.0%; height: 100.0%;">Pulkovo Airport</div>`)[0];
+            popup_512b1b16e57b4d56bd91cde9c79c64a5.setContent(html_667c4d529dbc48a693e91c0c2eef173d);
+        
+
+        marker_bf9493a3f54443f0a688eb371b010b1e.bindPopup(popup_512b1b16e57b4d56bd91cde9c79c64a5)
+        ;
+
+        
+    
+    
+            var poly_line_927f0c622c7a4ffcb283a5dbb9ccf013 = L.polyline(
+                [[25.25279999, 55.36439896], [59.8003006, 30.26250076]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 15}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+            var marker_e60aaef34b4643199be3c521ff52f01d = L.marker(
+                [10.81879997, 106.6520004],
+                {}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+        var popup_8bea8598bdfc40b19669613953fd0520 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3358806d71784ccd865cdf4d2672b96c = $(`<div id="html_3358806d71784ccd865cdf4d2672b96c" style="width: 100.0%; height: 100.0%;">Tan Son Nhat International Airport</div>`)[0];
+            popup_8bea8598bdfc40b19669613953fd0520.setContent(html_3358806d71784ccd865cdf4d2672b96c);
+        
+
+        marker_e60aaef34b4643199be3c521ff52f01d.bindPopup(popup_8bea8598bdfc40b19669613953fd0520)
+        ;
+
+        
+    
+    
+            var poly_line_8a3938093a9e47c0973c3e2ea5955664 = L.polyline(
+                [[25.25279999, 55.36439896], [10.81879997, 106.6520004]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 15}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+            var marker_bb86a57d42694c198cc8d617f0559e01 = L.marker(
+                [53.50490189, 50.16429901],
+                {}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+        var popup_113e044ec94e4118893647694465d09c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b94233afe9a247b180434aa226ccab6d = $(`<div id="html_b94233afe9a247b180434aa226ccab6d" style="width: 100.0%; height: 100.0%;">Kurumoch International Airport</div>`)[0];
+            popup_113e044ec94e4118893647694465d09c.setContent(html_b94233afe9a247b180434aa226ccab6d);
+        
+
+        marker_bb86a57d42694c198cc8d617f0559e01.bindPopup(popup_113e044ec94e4118893647694465d09c)
+        ;
+
+        
+    
+    
+            var poly_line_c360aa06442642f48dc6174661fc6179 = L.polyline(
+                [[25.25279999, 55.36439896], [53.50490189, 50.16429901]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 15}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+            var marker_4a03aad8ab6e4e8fb6f35ff5964bbd7c = L.marker(
+                [15.186, 120.559998],
+                {}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+    
+        var popup_e3f9261cec7d4d5095b21c6e25316fe0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_45ec36ff76524d1e9e68a6725ac4acf5 = $(`<div id="html_45ec36ff76524d1e9e68a6725ac4acf5" style="width: 100.0%; height: 100.0%;">Diosdado Macapagal International Airport</div>`)[0];
+            popup_e3f9261cec7d4d5095b21c6e25316fe0.setContent(html_45ec36ff76524d1e9e68a6725ac4acf5);
+        
+
+        marker_4a03aad8ab6e4e8fb6f35ff5964bbd7c.bindPopup(popup_e3f9261cec7d4d5095b21c6e25316fe0)
+        ;
+
+        
+    
+    
+            var poly_line_b4f67a691d9b44ba905b5df6f98875e0 = L.polyline(
+                [[25.25279999, 55.36439896], [15.186, 120.559998]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.8, "smoothFactor": 1.0, "stroke": true, "weight": 15}
+            ).addTo(map_60cebcd7a627481fb011decb329430e7);
+        
+</script>

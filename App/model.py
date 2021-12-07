@@ -34,10 +34,11 @@ from DISClib.Utils import error as error
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import graphstructure as gr
+from DISClib.Algorithms.Graphs import dijsktra as djk
+import folium
 assert cf
 
 # Construccion de modelos
-
 def newItinerary():
 
     """ Inicializa el analizador
@@ -57,7 +58,7 @@ def newItinerary():
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
         itinerary['AirportInfo'] = lt.newList('ARRAY_LIST')
         itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING')
-        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000,comparefunction=compareStopIds)
+        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=181,comparefunction=compareStopIds)
         itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=None)
         itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000, comparefunction=compareStopIds)
         itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000, comparefunction=compareStopIds)
@@ -107,8 +108,8 @@ def addCityAirports(cityMap,airportIATA, airport):
         m.put(cityMap, airport['Country']+'-'+airport["City"], listairports)
 
     else:
-        listairports=cityIs['values']
-        lt.addLast(airportIATA)
+        listairports=cityIs['value']
+        lt.addLast(listairports,airportIATA)
 
 def addCity (itinerary, city):
     """
@@ -127,7 +128,7 @@ def addFlightConnections(itinerary, flight):
         cleanDistance(flight)
         distance = float(flight['distance_km'])
         distance = abs(distance)
-        addAllArch(itinerary['Flights Network'], origin, destination, distance)
+        addArch(itinerary['Flights Network'], origin, destination, distance)
         LookDirectFlights(itinerary,origin, destination, distance)
         return itinerary
 
@@ -191,13 +192,16 @@ def addAllArch(itinerary, origin, destination, distance):
     return itinerary
 
 #Requirement No.1
+
 def moreFlights(flightsNetwork,airportdata):
     lstvert = gr.vertices(flightsNetwork)
     ordvert=lt.newList('SINGLE_LINKED')
 
     for vertex in lt.iterator(lstvert):
-        degree = gr.degree(flightsNetwork,vertex)
-        infovert={'Airport':vertex, 'Info': m.get(airportdata,vertex)['value'], 'Arch':int(degree)}
+        indegree = gr.indegree(flightsNetwork,vertex)
+        outdegree = gr.outdegree(flightsNetwork,vertex)
+        degree=indegree+outdegree
+        infovert={'Airport':vertex, 'Info': m.get(airportdata,vertex)['value'], 'Arch':int(degree), 'InBound':indegree, 'OutBound':outdegree}
         lt.addLast(ordvert,infovert)
     sa.sort(ordvert,maxarch)
 
@@ -206,51 +210,70 @@ def moreFlights(flightsNetwork,airportdata):
 def maxarch (airport1, airport2):
     return airport1['Arch']>airport2['Arch']
 
-def moreFlights2(flightsNetwork,airportdata):
-    """
-    Retorna la estación que sirve a mas rutas.
-    Si existen varias rutas con el mismo numero se
-    retorna una de ellas
-    """
-    lstvert = gr.vertices(flightsNetwork)
-    
-    points=None
-    maxdeg = -1
-
-    for vertex in lt.iterator(lstvert):
-        degree = gr.degree(flightsNetwork,vertex)
-    
-        if(degree > maxdeg):
-            points=lt.newList('ARRAY_LIST')
-            infovertex={"Airport":vertex,
-            'Info':m.get(airportdata,vertex)['value'],
-            "Size":degree}
-            lt.addLast(points,infovertex)
-            maxdeg = degree
-        
-        elif (degree==maxdeg):
-            infovertex={"Airport":vertex,
-            'Info':m.get(airportdata,vertex)['value'],
-            "Size":degree}
-            lt.addLast(points,infovertex)
-
-    return points
-
 #Requirement No.2
 
 
 #Requirement No.3
-def shortRoute2 (CityAirport,flightsNetwork):
-    print(gr.getVertex())
 
-def shortRoute (CityAirport,flightsNetwork):
-    print(gr.vertices(CityAirport))
+def SameNamesCityDestiny(city_destiny, itinerary):
+    cities = itinerary['AirportInfo']
+    city_destiny_information = []
+    for city in lt.iterator(cities):
+        if city['City'] == city_destiny:
+            
+            city_info = {'City':city['City'],
+                         'Country':city['Country'],
+                         'Latitude':city['Latitude'],
+                         'Longitude':city['Longitude'],
+                         'Airport': city['IATA']}
+            city_destiny_information.append(city_info)
+    return city_destiny_information
 
+def MinRoute(origin, destination, itinerary):
+    originname=origin['Country']+'-'+origin["City"]
+    #origin_airport=closestairport(originname,itinerary)
+    destinyname=destination['Country']+'-'+destination["City"]
+   # destiny_airport=closestairport(destinyname,itinerary)
+   # print(origin_airport,destiny_airport) 
+
+def oneairportoncity_nosearch(origin, destination,itinerary):
+    graph=djk.Dijkstra(itinerary['Flights Network'],origin['Airport'])
+    if djk.hasPathTo(graph,destination['Airport']):
+        minRoute = djk.pathTo(graph,destination['Airport'])
+        minDist = djk.distTo(graph,destination['Airport'])
+    return minRoute, minDist
+
+def getinfoAirport(itinerary,key):
+    return m.get(itinerary['Airports'], key)['value']
+
+def findclosestairport(itinerary,vertex1):
+    lowest=10000000
+    airport = ''
+    key=vertex1['Country']+'-'+vertex1['City']
+    vertexs=m.get(itinerary['Cities'],key)
+    for vertex in lt.iterator(vertexs):
+        if gr.containsEdge(itinerary['City Airports'],key,vertex):
+            edgeweight=gr.getEdge(itinerary['City Airports'],key,vertex)
+            print(edgeweight)
+            if edgeweight < lowest:
+                lowest=edgeweight
+                airport = vertex
+    vertex1['Airport']=airport
+    return vertex1    
+    
 #Requirement No.4
 
 
 #Requirement No.5
 
+def closedAirport(itinerary,airport):
+    listNoAir = gr.adjacents(itinerary['Flights Network'],airport)
+    sublist=lt.subList(listNoAir,1,5)
+    gr.removeVertex(itinerary['Direct flights'],airport)
+    print(gr.containsVertex(itinerary['Direct flights'],airport))
+    itinerary2=gr.removeVertex(itinerary['Flights Network'],airport)
+    return sublist 
+    
 
 #Requirement No.6
 
@@ -353,8 +376,8 @@ def compareroutes(route1, route2):
     else:
         return -1
 
-# Requerimientos
 #Requerimiento 3
+
 def SameNamesOrigin(origin, itinerary):
     cities = itinerary['CityInfo']
     origin_information = []
@@ -378,9 +401,3 @@ def SameNamesDestination(destination, itinerary):
                             'Longitude':city['lng']}
                 destination_information.append(city_info)
     return destination_information
-
-def MinRoute(origin, destination, itinerary):
-    """
-    WORK IN PROGRESS
-    """
-    return origin, destination

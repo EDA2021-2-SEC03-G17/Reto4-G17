@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_6652140d5b03426aad89adeba5fb1b90 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_6652140d5b03426aad89adeba5fb1b90" ></div>
+        
+</body>
+<script>    
+    
+            var map_6652140d5b03426aad89adeba5fb1b90 = L.map(
+                "map_6652140d5b03426aad89adeba5fb1b90",
+                {
+                    center: [0, 0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 1,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_285795c85161487c944157490d72749f = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+            var marker_3cc12e2805aa4e219228186611f67c3e = L.marker(
+                [59.8003006, 30.26250076],
+                {}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+        var popup_bfe3979813a143b0863099b5118def1e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d0d67162b06d453494eda6335dc58f9b = $(`<div id="html_d0d67162b06d453494eda6335dc58f9b" style="width: 100.0%; height: 100.0%;"><strong>Pulkovo Airport<strong></div>`)[0];
+            popup_bfe3979813a143b0863099b5118def1e.setContent(html_d0d67162b06d453494eda6335dc58f9b);
+        
+
+        marker_3cc12e2805aa4e219228186611f67c3e.bindPopup(popup_bfe3979813a143b0863099b5118def1e)
+        ;
+
+        
+    
+    
+            marker_3cc12e2805aa4e219228186611f67c3e.bindTooltip(
+                `<div>
+                     LED
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_e2415cc1b3974bb8a348605c9cd24345 = L.marker(
+                [25.25279999, 55.36439896],
+                {}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+        var popup_0cbc570b7820472abf01cc71edf9796a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_741b6934faec4961b7b0f7780467eb9a = $(`<div id="html_741b6934faec4961b7b0f7780467eb9a" style="width: 100.0%; height: 100.0%;"><strong>Dubai International Airport<strong></div>`)[0];
+            popup_0cbc570b7820472abf01cc71edf9796a.setContent(html_741b6934faec4961b7b0f7780467eb9a);
+        
+
+        marker_e2415cc1b3974bb8a348605c9cd24345.bindPopup(popup_0cbc570b7820472abf01cc71edf9796a)
+        ;
+
+        
+    
+    
+            marker_e2415cc1b3974bb8a348605c9cd24345.bindTooltip(
+                `<div>
+                     DXB
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_fd3f77a799bc49af9699afb389b44c0b = L.marker(
+                [53.50490189, 50.16429901],
+                {}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+        var popup_6e52fd0f2ce941509f751e708a53dc42 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_61c5281292ac440382cd549570dff4c4 = $(`<div id="html_61c5281292ac440382cd549570dff4c4" style="width: 100.0%; height: 100.0%;"><strong>Kurumoch International Airport<strong></div>`)[0];
+            popup_6e52fd0f2ce941509f751e708a53dc42.setContent(html_61c5281292ac440382cd549570dff4c4);
+        
+
+        marker_fd3f77a799bc49af9699afb389b44c0b.bindPopup(popup_6e52fd0f2ce941509f751e708a53dc42)
+        ;
+
+        
+    
+    
+            marker_fd3f77a799bc49af9699afb389b44c0b.bindTooltip(
+                `<div>
+                     KUF
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_ef2542a0f1d84a49b01f7363da6ce891 = L.marker(
+                [48.52799988, 135.1880035],
+                {}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+        var popup_0f97cd97d64e41dd9552e0b69e1ec4f0 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e41d8a245f0545d383cd2885ef812390 = $(`<div id="html_e41d8a245f0545d383cd2885ef812390" style="width: 100.0%; height: 100.0%;"><strong>Khabarovsk-Novy Airport<strong></div>`)[0];
+            popup_0f97cd97d64e41dd9552e0b69e1ec4f0.setContent(html_e41d8a245f0545d383cd2885ef812390);
+        
+
+        marker_ef2542a0f1d84a49b01f7363da6ce891.bindPopup(popup_0f97cd97d64e41dd9552e0b69e1ec4f0)
+        ;
+
+        
+    
+    
+            marker_ef2542a0f1d84a49b01f7363da6ce891.bindTooltip(
+                `<div>
+                     KHV
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_2f7e0156963e424582bf14a77a4e3d25 = L.marker(
+                [38.7813, -9.13592],
+                {}
+            ).addTo(map_6652140d5b03426aad89adeba5fb1b90);
+        
+    
+        var popup_b27f7517e0cf461b90974632aaa166c3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_bfcac66db9cd464f88d7c9f29f963d15 = $(`<div id="html_bfcac66db9cd464f88d7c9f29f963d15" style="width: 100.0%; height: 100.0%;"><strong>Humberto Delgado Airport (Lisbon Portela Airport)<strong></div>`)[0];
+            popup_b27f7517e0cf461b90974632aaa166c3.setContent(html_bfcac66db9cd464f88d7c9f29f963d15);
+        
+
+        marker_2f7e0156963e424582bf14a77a4e3d25.bindPopup(popup_b27f7517e0cf461b90974632aaa166c3)
+        ;
+
+        
+    
+    
+            marker_2f7e0156963e424582bf14a77a4e3d25.bindTooltip(
+                `<div>
+                     LIS
+                 </div>`,
+                {"sticky": true}
+            );
+        
+</script>
