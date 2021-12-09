@@ -449,5 +449,5 @@ def TravelerMiles(origin, miles, itinerary):
     total_weight = total_weight_longest_branch
     for i in lt.iterator(edges_list):
         total_weight += int(i['weight'])
-    full_trip_distance = ((total_weight_longest_branch*2)/1.609)-int(miles)
+    full_trip_distance = ((total_weight_longest_branch*2)/1.609)-float(miles)
     return [answer_list, total_nodes, total_weight, full_trip_distance]
