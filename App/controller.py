@@ -167,8 +167,6 @@ def totalAirports3(itinerary):
 def Firstairport(itinerary):
     return model.cityInfo(itinerary['AirportInfo'])
 
-    return model.AirportsInfo(itinerary['Airports'])
-
 # Requerimientos
 #Req 2
 def StronglyConnectedComponents(IATA1, IATA2, itinerary):

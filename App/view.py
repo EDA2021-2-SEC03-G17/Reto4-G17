@@ -49,7 +49,7 @@ def printMenu():
     print("3- Air interconnection points. ")
     print("4- Find the number of SCC in the network and if 2 airports are in one")
     print("5- Find the minimum route between two cities")
-    print("6-  Use the traveler miles")
+    print("6- Use the traveler miles")
     print("7- Quantify the effect of a closed airport.")
     print("0- Exit.")
     print("____________________________________________________________")
@@ -246,7 +246,7 @@ def thread_cycle():
 
         elif int(inputs[0]) == 6:
             m=f.Map(location=None,zoom_start=0)
-            origin = input('Please input your origin\n')
+            origin = input('Please input your origin like this: Country-City\n')
             miles = input('Please input your miles\n')
             answer = req4(origin, miles, itinerary)
             print('The total number of nodes is ' + str(answer[1]))
