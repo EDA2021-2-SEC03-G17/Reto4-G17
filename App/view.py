@@ -49,7 +49,7 @@ def printMenu():
     print("3- Air interconnection points. ")
     print("4- Find the number of SCC in the network and if 2 airports are in one")
     print("5- Find the minimum route between two cities")
-    print("6-  Use the traveler miles")
+    print("6- Use the traveler miles")
     print("7- Quantify the effect of a closed airport.")
     print("0- Exit.")
     print("____________________________________________________________")

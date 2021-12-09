@@ -62,11 +62,12 @@ def newItinerary():
                     'Direct flights':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
+        itinerary['AirportInfo'] = lt.newList('ARRAY_LIST')
         itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
         itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Flights Network Reverse'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Round Trip'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
-        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
+        itinerary['Cities'] = m.newMap(numelements=200, maptype='PROBING', comparefunction=compareStopIds)
         itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
         itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
         return itinerary
@@ -458,6 +459,7 @@ def MinRoute(origin, destination, itinerary):
 def TravelerMiles(origin, miles, itinerary):
     network = itinerary['Direct flights']
     pair = m.get(itinerary['Cities'], origin)
+    print(origin)
     airport_list = me.getValue(pair)
     airport = lt.getElement(airport_list,0)
     mst = prim.PrimMST(network)
