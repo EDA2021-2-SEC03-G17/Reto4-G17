@@ -229,12 +229,6 @@ def SameNamesCityDestiny(city_destiny, itinerary):
             city_destiny_information.append(city_info)
     return city_destiny_information
 
-def MinRoute(origin, destination, itinerary):
-    originname=origin['Country']+'-'+origin["City"]
-    #origin_airport=closestairport(originname,itinerary)
-    destinyname=destination['Country']+'-'+destination["City"]
-   # destiny_airport=closestairport(destinyname,itinerary)
-   # print(origin_airport,destiny_airport) 
 
 def oneairportoncity_nosearch(origin, destination,itinerary):
     graph=djk.Dijkstra(itinerary['Flights Network'],origin['Airport'])
@@ -250,17 +244,60 @@ def findclosestairport(itinerary,vertex1):
     lowest=10000000
     airport = ''
     key=vertex1['Country']+'-'+vertex1['City']
-    vertexs=m.get(itinerary['Cities'],key)
+    vertexs=m.get(itinerary['Cities'],key)['value']
     for vertex in lt.iterator(vertexs):
-        if gr.containsEdge(itinerary['City Airports'],key,vertex):
+        if gr.containsVertex(itinerary['City Airports'],vertex):
             edgeweight=gr.getEdge(itinerary['City Airports'],key,vertex)
             print(edgeweight)
-            if edgeweight < lowest:
+            if edgeweight['weight'] < lowest:
                 lowest=edgeweight
                 airport = vertex
     vertex1['Airport']=airport
     return vertex1    
-    
+
+#Requirement No.3.2
+
+def SameNamesCityDestiny2(city_destiny, itinerary):
+    cities = itinerary['CityInfo']
+    city_destiny_information = []
+    for city in lt.iterator(cities):
+        if city["city_ascii"] == city_destiny:
+            city_info = {'City':city['city'],
+                         'Country':city['country'],
+                         'Latitude':city['lat'],
+                         'Longitude':city['lng'],
+                         'Airport': None
+                         }
+
+            city_destiny_information.append(city_info)
+    return city_destiny_information
+
+
+def oneairportoncity_nosearch2(origin, destination,itinerary):
+    graph=djk.Dijkstra(itinerary['Flights Network'],origin['Airport'])
+    if djk.hasPathTo(graph,destination['Airport']):
+        minRoute = djk.pathTo(graph,destination['Airport'])
+        minDist = djk.distTo(graph,destination['Airport'])
+    return minRoute, minDist
+
+def getinfoAirport2(itinerary,key):
+    return m.get(itinerary['Airports'], key)['value']
+
+def findclosestairport2(itinerary,vertex1):
+    lowest=10000000
+    airport = ''
+    key=vertex1['Country']+'-'+vertex1['City']
+    vertexs=m.get(itinerary['Cities'],key)['value']
+    for vertex in lt.iterator(vertexs):
+        if gr.containsVertex(itinerary['City Airports'],vertex):
+            edgeweight=gr.getEdge(itinerary['City Airports'],key,vertex)
+            print(edgeweight)
+            if edgeweight['weight'] < lowest:
+                lowest=edgeweight
+                airport = vertex
+    vertex1['Airport']=airport
+    return vertex1    
+
 #Requirement No.4
 
 
@@ -269,10 +306,14 @@ def findclosestairport(itinerary,vertex1):
 def closedAirport(itinerary,airport):
     listNoAir = gr.adjacents(itinerary['Flights Network'],airport)
     sublist=lt.subList(listNoAir,1,5)
-    gr.removeVertex(itinerary['Direct flights'],airport)
-    print(gr.containsVertex(itinerary['Direct flights'],airport))
-    itinerary2=gr.removeVertex(itinerary['Flights Network'],airport)
-    return sublist 
+    num = archingraph (itinerary['Direct flights'],airport)
+    return sublist,num
+
+def archingraph(itinerary,airport):
+    indegree = gr.indegree(itinerary,airport)
+    outdegree = gr.outdegree(itinerary,airport)
+    degree=indegree+outdegree
+    return degree
     
 
 #Requirement No.6
