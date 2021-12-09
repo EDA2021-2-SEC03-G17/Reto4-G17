@@ -28,6 +28,7 @@ import threading
 from App import controller
 from DISClib.ADT import stack
 from DISClib.ADT import list as lt
+from DISClib.DataStructures import mapstructure as me
 import folium as f
 assert config
 
@@ -257,7 +258,17 @@ def thread_cycle():
             if int(answer[3]) > 0:
                 print('You need ' + str(answer[3]) + ' more kilometers')
 
-
+            #GRAFICA
+            for element in answer[0]:
+                key=element['key']
+                value=(element['value'])['edgeTo']
+                getinfoA=controller.getinfoAirport(itinerary,key)
+                getinfoB=controller.getinfoAirport(itinerary,value)
+                CoordinatesA=[getinfoA['Latitude'],getinfoA['Longitude']]
+                CoordinatesB=[getinfoB['Latitude'],getinfoB['Longitude']]
+                f.Marker(CoordinatesA, popup=key).add_to(m)
+                f.Marker(CoordinatesB, popup=value).add_to(m)
+                f.PolyLine([CoordinatesA,CoordinatesB],color='red',weight=15,opacity=0.8).add_to(m)
             m.save('index4.html')
 
         elif int(inputs[0]) == 3:
