@@ -51,7 +51,7 @@ def loadItinerary(itinerary):
 
 def loadAirport(itinerary):
 
-    airportsfile = cf.data_dir + "airports_full.csv"
+    airportsfile = cf.data_dir + "airports-utf8-small.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
     input_file = csv.DictReader(open(airportsfile, encoding='utf-8'))
     for airport in input_file:
@@ -60,7 +60,7 @@ def loadAirport(itinerary):
     
 def loadCities(itinerary):
 
-    citiesfile = cf.data_dir + "worldcities.csv"
+    citiesfile = cf.data_dir + "worldcities-utf8.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
     input_file = csv.DictReader(open(citiesfile, encoding='utf-8'))
     for city in input_file:
@@ -69,7 +69,7 @@ def loadCities(itinerary):
 
 def loadFlights(itinerary):
 
-    flightsfile = cf.data_dir + "routes_full.csv"
+    flightsfile = cf.data_dir + "routes-utf8-small.csv"
     #C:\Users\Admin\Documents\Universidad\4TO SEMESTRE\EDA\MODULO 3\Reto3-G17\
     input_file = csv.DictReader(open(flightsfile, encoding='utf-8'))
     for route in input_file:
@@ -121,6 +121,10 @@ def Firstairport(itinerary):
     return model.AirportsInfo(itinerary['Airports'])
 
 # Requerimientos
+#Req 2
+def StronglyConnectedComponents(IATA1, IATA2, itinerary):
+    return model.StronglyConnectedComponents(IATA1, IATA2, itinerary)
+
 #Req 3
 def SameNamesOrigin(origin, itinerary):
     return model.SameNamesOrigin(origin,itinerary)
@@ -130,3 +134,7 @@ def SameNamesDestination(destination, itinerary):
 
 def MinRoute(origin, destination, itinerary):
     return model.MinRoute(origin, destination, itinerary)
+
+#Req 4
+def TravelerMiles(origin, miles, itinerary):
+    return model.TravelerMiles(origin, miles, itinerary)
