@@ -113,9 +113,9 @@ def requirement3(itinerary):
     list_cities = homonymOrigin(origin,itinerary)
     if len(list_cities) > 1:
         print('There is more than 1 city with the same name:\n')
-        i=1
+        i=0
         for element in list_cities:
-            print(str(i)+". "+str(element))
+            print(str(i)+". "+str(element['City'])+'-'+str(element['Country'])+' located at '+str(element['Latitude'])+', '+str(element['Longitude']))
             i+=1
         index = int(input('\nSelect city by number : '))
         origin = list_cities[index]
@@ -130,18 +130,20 @@ def requirement3(itinerary):
     list_destinations = homonymDestination(destination,itinerary)
     if len(list_destinations) > 1:
         print('There is more than 1 city with the same name, please choose a single one: \n')
-        i=1
+        i=0
         for element in list_destinations:
             print(str(i)+". "+str(element['City'])+'-'+str(element['Country'])+' located in '+str(element['Latitude'])+', '+str(element['Longitude']))
             i+=1
         index = int(input('\nEnter the position of the city you chose: '))
         destination = list_destinations[index]
+        destination = controller.findclosestairport(itinerary,origin)
     elif len(list_destinations) == 0:
         print('The city does not exist or does not have flights')
         requirement3(itinerary)
     else:
         destination = list_destinations[0]
-        trip, distance=controller.MinRouteOneAirport(origin,destination, itinerary)
+        
+    trip, distance=controller.MinRouteOneAirport(origin,destination, itinerary)
 
     #req3(origin, destination, itinerary)
     m=f.Map(location=None,zoom_start=0)
@@ -166,22 +168,22 @@ def requirement3(itinerary):
 
 def closedAirport(itinerary):
     IATA=input("Enter the IATA code of the de-commissioned airport: ")
-    affectedAirports=controller.closedAirport(itinerary,IATA)
+    affectedAirports,num=controller.closedAirport(itinerary,IATA)
     m=f.Map(location=None,zoom_start=0)
     getinfoA=controller.getinfoAirport(itinerary,IATA)
     CoordinatesA=[getinfoA['Latitude'],getinfoA['Longitude']]
-    '''numedges = controller.totalConnections5(NewItinerary)
-    numvertex = controller.totalAirports5(NewItinerary)
+    numedges = controller.totalConnections(itinerary)
+    numvertex = controller.totalAirports(itinerary)
     print("\n=== Flights Network DiGraph ===" )
     print('Number of airport: ' + str(numvertex))
-    print('Number of flights: ' + str(numedges))
+    print('Number of flights: ' + str(numedges-num))
 
-    numedges = controller.totalConnections5(NewItinerary)
-    numvertex = controller.totalAirports5(NewItinerary)
+    numedges = controller.totalConnections3(itinerary)
+    numvertex = controller.totalAirports3(itinerary)
     #No son 39 rutas puesto que no hay arcos repetidos pues no se tienen en cuenta las aerolineas
     print("\n === Direct Flights Graph ===")
     print('Number of airports: ' + str(numvertex))
-    print('Number of flights: ' + str(numedges))'''
+    print('Number of flights: ' + str(numedges-num))
     for element in lt.iterator(affectedAirports):
         getinfoB=controller.getinfoAirport(itinerary,element)
         CoordinatesB=[getinfoB['Latitude'],getinfoB['Longitude']]
