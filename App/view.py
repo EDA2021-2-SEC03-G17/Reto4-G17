@@ -136,13 +136,11 @@ def requirement3(itinerary):
             i+=1
         index = int(input('\nEnter the position of the city you chose: '))
         destination = list_destinations[index]
-        destination = controller.findclosestairport(itinerary,origin)
     elif len(list_destinations) == 0:
         print('The city does not exist or does not have flights')
         requirement3(itinerary)
     else:
-        destination = list_destinations[0]
-        
+        destination = list_destinations[0]  
     trip, distance=controller.MinRouteOneAirport(origin,destination, itinerary)
 
     #req3(origin, destination, itinerary)
@@ -231,12 +229,23 @@ def thread_cycle():
             loadData(itinerary)
 
         elif int(inputs[0]) == 4:
+            m=f.Map(location=None,zoom_start=0)
             IATA1 = input('Please input the IATA code of the first airport\n')
             IATA2 = input('Please input the IATA code of the second airport\n')
             x = req2(IATA1, IATA2, itinerary)
+            getinfoA=controller.getinfoAirport(itinerary,IATA1)
+            getinfoB=controller.getinfoAirport(itinerary,IATA2)
+            CoordinatesA=[getinfoA['Latitude'],getinfoA['Longitude']]
+            CoordinatesB=[getinfoB['Latitude'],getinfoB['Longitude']]
+            f.Marker(CoordinatesA, popup=IATA1).add_to(m)
+            f.Marker(CoordinatesB, popup=IATA2).add_to(m)
+            if itinerary:
+                f.PolyLine([CoordinatesA,CoordinatesB],color='red',weight=15,opacity=0.8).add_to(m)
+            m.save('index2.html')
             print(x)
 
         elif int(inputs[0]) == 6:
+            m=f.Map(location=None,zoom_start=0)
             origin = input('Please input your origin\n')
             miles = input('Please input your miles\n')
             answer = req4(origin, miles, itinerary)
@@ -247,6 +256,9 @@ def thread_cycle():
                 print('You have an excess of ' + str(abs(answer[3])) + ' kilometers')
             if int(answer[3]) > 0:
                 print('You need ' + str(answer[3]) + ' more kilometers')
+
+
+            m.save('index4.html')
 
         elif int(inputs[0]) == 3:
             moreFlights(itinerary)

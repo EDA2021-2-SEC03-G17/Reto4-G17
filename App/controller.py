@@ -174,15 +174,6 @@ def Firstairport(itinerary):
 def StronglyConnectedComponents(IATA1, IATA2, itinerary):
     return model.StronglyConnectedComponents(IATA1, IATA2, itinerary)
 
-#Req 3
-def SameNamesOrigin(origin, itinerary):
-    return model.SameNamesOrigin(origin,itinerary)
-
-def SameNamesDestination(destination, itinerary):
-    return model.SameNamesOrigin(destination,itinerary)
-
-def MinRoute(origin, destination, itinerary):
-    return model.MinRoute(origin, destination, itinerary)
 
 #Req 4
 def TravelerMiles(origin, miles, itinerary):

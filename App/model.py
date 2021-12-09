@@ -62,6 +62,7 @@ def newItinerary():
                     'Direct flights':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
+        itinerary['AirportInfo'] = lt.newList("ARRAY_LIST")
         itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
         itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
         itinerary['Flights Network Reverse'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
@@ -228,7 +229,6 @@ def SameNamesCityDestiny(city_destiny, itinerary):
     city_destiny_information = []
     for city in lt.iterator(cities):
         if city['City'] == city_destiny:
-            
             city_info = {'City':city['City'],
                          'Country':city['Country'],
                          'Latitude':city['Latitude'],
@@ -252,55 +252,11 @@ def findclosestairport(itinerary,vertex1):
     lowest=10000000
     airport = ''
     key=vertex1['Country']+'-'+vertex1['City']
-    vertexs=m.get(itinerary['Cities'],key)['value']
+    vertexs=m.get(itinerary['Cities'],key)
     for vertex in lt.iterator(vertexs):
-        if gr.containsVertex(itinerary['City Airports'],vertex):
+        if gr.containsEdge(itinerary['City Airports'],key,vertex):
             edgeweight=gr.getEdge(itinerary['City Airports'],key,vertex)
-            print(edgeweight)
-            if edgeweight['weight'] < lowest:
-                lowest=edgeweight
-                airport = vertex
-    vertex1['Airport']=airport
-    return vertex1    
-
-#Requirement No.3.2
-
-def SameNamesCityDestiny2(city_destiny, itinerary):
-    cities = itinerary['CityInfo']
-    city_destiny_information = []
-    for city in lt.iterator(cities):
-        if city["city_ascii"] == city_destiny:
-            city_info = {'City':city['city'],
-                         'Country':city['country'],
-                         'Latitude':city['lat'],
-                         'Longitude':city['lng'],
-                         'Airport': None
-                         }
-
-            city_destiny_information.append(city_info)
-    return city_destiny_information
-
-
-def oneairportoncity_nosearch2(origin, destination,itinerary):
-    graph=djk.Dijkstra(itinerary['Flights Network'],origin['Airport'])
-    if djk.hasPathTo(graph,destination['Airport']):
-        minRoute = djk.pathTo(graph,destination['Airport'])
-        minDist = djk.distTo(graph,destination['Airport'])
-    return minRoute, minDist
-
-def getinfoAirport2(itinerary,key):
-    return m.get(itinerary['Airports'], key)['value']
-
-def findclosestairport2(itinerary,vertex1):
-    lowest=10000000
-    airport = ''
-    key=vertex1['Country']+'-'+vertex1['City']
-    vertexs=m.get(itinerary['Cities'],key)['value']
-    for vertex in lt.iterator(vertexs):
-        if gr.containsVertex(itinerary['City Airports'],vertex):
-            edgeweight=gr.getEdge(itinerary['City Airports'],key,vertex)
-            print(edgeweight)
-            if edgeweight['weight'] < lowest:
+            if edgeweight < lowest:
                 lowest=edgeweight
                 airport = vertex
     vertex1['Airport']=airport
@@ -463,37 +419,6 @@ def SameComponent(scc, IATA1, IATA2):
     IATA2_id_pair = m.get(scc['idscc'], IATA2)
     IATA2_id = me.getValue(IATA2_id_pair)
     return IATA1_id == IATA2_id
-#Requerimiento 3
-
-def SameNamesOrigin(origin, itinerary):
-    cities = itinerary['CityInfo']
-    origin_information = []
-    for city in lt.iterator(cities):
-        if city['city_ascii'] == origin:
-            city_info = {'City':city['city_ascii'],
-                         'Country':city['country'],
-                         'Latitude':city['lat'],
-                         'Longitude':city['lng']}
-            origin_information.append(city_info)
-    return origin_information
-
-def SameNamesDestination(destination, itinerary):
-    cities = itinerary['CityInfo']
-    destination_information = []
-    for city in lt.iterator(cities):
-        if city['city_ascii'] == destination:
-                city_info = {'City':city['city_ascii'],
-                            'Country':city['country'],
-                            'Latitude':city['lat'],
-                            'Longitude':city['lng']}
-                destination_information.append(city_info)
-    return destination_information
-
-def MinRoute(origin, destination, itinerary):
-    """
-    WORK IN PROGRESS
-    """
-    return origin, destination
 
 #Requerimiento 4
 def TravelerMiles(origin, miles, itinerary):
