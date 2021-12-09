@@ -76,6 +76,54 @@ def loadFlights(itinerary):
         model.addFlightConnections(itinerary, route)
     print('Flights: Done')
 
+#Requirement No.1
+
+def moreFlights(itinerary):
+    return model.moreFlights(itinerary['Flights Network'],itinerary['Airports'])
+
+#Requirement No.2
+
+
+#Requirement No.3
+def findclosestairport(itinerary,vertex):
+    return model.findclosestairport(itinerary,vertex)
+
+def SameNamesOrigin(origin, itinerary):
+    return model.SameNamesCityDestiny(origin,itinerary)
+
+def SameNamesDestination(destination, itinerary):
+    return model.SameNamesCityDestiny(destination,itinerary)
+
+def MinRoute(origin, destination, itinerary):
+    return model.MinRoute(origin, destination, itinerary) 
+
+def MinRouteOneAirport(origin, destinatination, itinerary):
+    return model.oneairportoncity_nosearch(origin, destinatination, itinerary)
+
+def getinfoAirport (itinerary,key):
+    return model.getinfoAirport(itinerary,key)
+#Requirement No.4
+
+
+#Requirement No.5
+
+def closedAirport(itinerary,airport):
+    return model.closedAirport(itinerary,airport)
+
+def totalConnections5(itinerary):
+    """
+    Total de enlaces entre las paradas
+    """
+    return model.totalConnections(itinerary)
+
+def totalAirports5(itinerary):
+    """
+    Total de paradas de autobus
+    """
+    return model.totalAirports(itinerary)
+
+#Requirement No.6
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
@@ -117,6 +165,7 @@ def totalAirports3(itinerary):
     return model.totalAirports(itinerary['Direct flights'])
 
 def Firstairport(itinerary):
+    return model.cityInfo(itinerary['AirportInfo'])
 
     return model.AirportsInfo(itinerary['Airports'])
 
@@ -138,3 +187,5 @@ def MinRoute(origin, destination, itinerary):
 #Req 4
 def TravelerMiles(origin, miles, itinerary):
     return model.TravelerMiles(origin, miles, itinerary)
+def lastCity(itinerary):
+    return model.cityInfo(itinerary["CityInfo"])
