@@ -235,7 +235,7 @@ def thread_cycle():
             print(x)
 
         elif int(inputs[0]) == 6:
-            origin = input('Please input your origin\n')
+            origin = input('Please input your origin like this: Country-City\n')
             miles = input('Please input your miles\n')
             answer = req4(origin, miles, itinerary)
             print('The total number of nodes is ' + str(answer[1]))
