@@ -30,10 +30,14 @@ import config as cf
 import math
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as m
+from DISClib.ADT import stack as st
 from DISClib.Utils import error as error
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import graphstructure as gr
+from DISClib.Algorithms.Graphs import dfo as dfo
+from DISClib.Algorithms.Graphs import dfs as dfs
+from DISClib.Algorithms.Graphs import prim as prim
 from DISClib.Algorithms.Graphs import dijsktra as djk
 import folium
 assert cf
@@ -52,17 +56,19 @@ def newItinerary():
                     'CityInfo': None,
                     'Airports': None,
                     "Flights Network": None,
-                    'Cities':None,
-                    'City Airports':None
+                    'Flights Network Reverse': None,
+                    'Round Trip':None,
+                    'City Airports':None,
+                    'Direct flights':None
                     }
         itinerary['CityInfo'] = lt.newList("ARRAY_LIST")
-        itinerary['AirportInfo'] = lt.newList('ARRAY_LIST')
-        itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING')
-        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=181,comparefunction=compareStopIds)
-        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=None)
-        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000, comparefunction=compareStopIds)
-        itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000, comparefunction=compareStopIds)
-
+        itinerary['Airports'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
+        itinerary['Flights Network'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Flights Network Reverse'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Round Trip'] = gr.newGraph(datastructure='ADJ_LIST',directed=True,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Cities'] = m.newMap(numelements=14000, maptype='PROBING', comparefunction=compareStopIds)
+        itinerary['City Airports'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
+        itinerary['Direct flights'] = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=400000 ,comparefunction=compareStopIds)
         return itinerary
 
     except Exception as exp:
@@ -78,6 +84,7 @@ def addAirports (itinerary, airport):
     airportIATA = airport['IATA']
     lt.addLast(itinerary['AirportInfo'],airport)
     addVertex(itinerary['Flights Network'], airportIATA)
+    addVertex(itinerary['Flights Network Reverse'], airportIATA)
     addVertex(itinerary['Direct flights'], airportIATA)
     addAirportInfo(itinerary['Airports'], airportIATA, airport)
     addCityAirports(itinerary['Cities'], airportIATA, airport)
@@ -129,6 +136,7 @@ def addFlightConnections(itinerary, flight):
         distance = float(flight['distance_km'])
         distance = abs(distance)
         addArch(itinerary['Flights Network'], origin, destination, distance)
+        addArch(itinerary['Flights Network Reverse'], destination, origin, distance)
         LookDirectFlights(itinerary,origin, destination, distance)
         return itinerary
 
@@ -417,6 +425,44 @@ def compareroutes(route1, route2):
     else:
         return -1
 
+# Requerimientos
+#Requerimiento 2
+def StronglyConnectedComponents(IATA1, IATA2, itinerary):
+    flight_network = itinerary['Flights Network Reverse']
+    scc = {'idscc':None,
+           'marked': None,
+           'grmarked':None,
+           'components':0
+           }
+    scc['idscc']= m.newMap(gr.numVertices(flight_network),maptype='PROBING',comparefunction=None)
+    scc['marked']= m.newMap(gr.numVertices(flight_network),maptype='PROBING',comparefunction=None)
+    scc['grmarked']= m.newMap(gr.numVertices(flight_network),maptype='PROBING',comparefunction=None)
+    dfo_overReversed=dfo.DepthFirstOrder(flight_network)
+    stackFromDFO = dfo_overReversed['reversepost']
+    scc['components'] = 1
+    while not st.isEmpty(stackFromDFO):
+        vertex = st.pop(stackFromDFO)
+        if not m.contains(scc['marked'], vertex):
+            scccount(flight_network,scc,vertex)
+            scc['components']+=1
+    return scc['components'], SameComponent(scc, IATA1, IATA2)
+
+def scccount(graph, scc, vert):
+    m.put(scc['marked'], vert, True)
+    m.put(scc['idscc'], vert, scc['components'])
+    lstadjacents = gr.adjacents(graph,vert)
+    adjiterator = lt.iterator(lstadjacents)
+    for i in adjiterator:
+        if not m.contains(scc['marked'], i):
+            scccount(graph, scc, i)
+    return scc
+
+def SameComponent(scc, IATA1, IATA2):
+    IATA1_id_pair = m.get(scc['idscc'], IATA1)
+    IATA1_id = me.getValue(IATA1_id_pair)
+    IATA2_id_pair = m.get(scc['idscc'], IATA2)
+    IATA2_id = me.getValue(IATA2_id_pair)
+    return IATA1_id == IATA2_id
 #Requerimiento 3
 
 def SameNamesOrigin(origin, itinerary):
@@ -442,3 +488,40 @@ def SameNamesDestination(destination, itinerary):
                             'Longitude':city['lng']}
                 destination_information.append(city_info)
     return destination_information
+
+def MinRoute(origin, destination, itinerary):
+    """
+    WORK IN PROGRESS
+    """
+    return origin, destination
+
+#Requerimiento 4
+def TravelerMiles(origin, miles, itinerary):
+    network = itinerary['Direct flights']
+    pair = m.get(itinerary['Cities'], origin)
+    airport_list = me.getValue(pair)
+    airport = lt.getElement(airport_list,0)
+    mst = prim.PrimMST(network)
+    edge = prim.edgesMST(network,mst)
+    mst_graph = gr.newGraph(datastructure='ADJ_LIST',directed=False,size=15 ,comparefunction=compareStopIds)
+    for i in lt.iterator(edge['mst']):
+        addVertex(mst_graph, i['vertexA'])
+        addVertex(mst_graph, i['vertexB'])
+        addArch(mst_graph, i['vertexA'], i['vertexB'], i['weight'])
+    total_nodes = gr.numVertices(mst_graph)
+    searchOverNewGraph = dfs.DepthFirstSearch(mst_graph, airport)
+    specific_dict = searchOverNewGraph['visited']['table']['elements']
+    answer_list = []
+    total_weight_longest_branch = 0
+    edges_list = gr.edges(mst_graph)
+    for i in specific_dict:
+        if i['key'] != None and i['value']['edgeTo'] != None:
+            answer_list.append(i)
+    for i in answer_list:
+        weightBetweenTwoPoints = gr.getEdge(mst_graph, i['key'], i['value']['edgeTo'])
+        total_weight_longest_branch += int(weightBetweenTwoPoints['weight'])
+    total_weight = total_weight_longest_branch
+    for i in lt.iterator(edges_list):
+        total_weight += int(i['weight'])
+    full_trip_distance = ((total_weight_longest_branch*2)/1.609)-int(miles)
+    return [answer_list, total_nodes, total_weight, full_trip_distance]

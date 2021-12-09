@@ -47,9 +47,9 @@ def printMenu():
     print("\n1- Start Itinerary. ")
     print("2- Load flights and aiports information.")
     print("3- Air interconnection points. ")
-    print("4- ")
-    print("5- Find the minimum route between two cities.")
-    print("6-  ")
+    print("4- Find the number of SCC in the network and if 2 airports are in one")
+    print("5- Find the minimum route between two cities")
+    print("6-  Use the traveler miles")
     print("7- Quantify the effect of a closed airport.")
     print("0- Exit.")
     print("____________________________________________________________")
@@ -205,6 +205,14 @@ def homonymDestination(destination, itinerary):
     SameNamesDestination = controller.SameNamesDestination(destination,itinerary)
     return SameNamesDestination
 
+def req2(IATA1, IATA2, itinerary):
+    return controller.StronglyConnectedComponents(IATA1, IATA2, itinerary)
+
+def req3(origin,destination,itinerary):
+    return controller.MinRoute(origin, destination, itinerary)
+
+def req4(origin, miles, itinerary):
+    return controller.TravelerMiles(origin, miles, itinerary)
 """
 Menu principal
 """
@@ -222,17 +230,31 @@ def thread_cycle():
         elif int(inputs[0]) == 2:
             loadData(itinerary)
 
+        elif int(inputs[0]) == 4:
+            IATA1 = input('Please input the IATA code of the first airport\n')
+            IATA2 = input('Please input the IATA code of the second airport\n')
+            x = req2(IATA1, IATA2, itinerary)
+            print(x)
+
+        elif int(inputs[0]) == 6:
+            origin = input('Please input your origin\n')
+            miles = input('Please input your miles\n')
+            answer = req4(origin, miles, itinerary)
+            print('The total number of nodes is ' + str(answer[1]))
+            print('The total distance of the MST is ' + str(answer[2]))
+            print('The longest branch is ' + str(answer[0]))
+            if int(answer[3]) < 0:
+                print('You have an excess of ' + str(abs(answer[3])) + ' kilometers')
+            if int(answer[3]) > 0:
+                print('You need ' + str(answer[3]) + ' more kilometers')
+
         elif int(inputs[0]) == 3:
             moreFlights(itinerary)
 
-        elif int(inputs[0]) == 4:
-            pass
 
         elif int(inputs[0]) == 5:            
             requirement3(itinerary)
 
-        elif int(inputs[0]) == 6:
-            pass
 
         elif int(inputs[0]) == 7:
             closedAirport(itinerary)
